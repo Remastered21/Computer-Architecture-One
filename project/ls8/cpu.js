@@ -2,7 +2,8 @@
  * LS-8 v2.0 emulator skeleton code
  */
 const LDI = 0b10011001;
-
+const PRN = 0b01000011;
+const HLT = 0b00000001;
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -97,7 +98,7 @@ class CPU {
     const IR = this.ram.read(this.PC);
 
     // Debugging output
-    console.log(`${this.PC}: ${IR.toString(2)}`);
+    // console.log(`${this.PC}: ${IR.toString(2)}`);
 
     // Get the two bytes in memory _after_ the PC in case the instruction
     // needs them.
@@ -114,6 +115,16 @@ class CPU {
         // Set the value in a register
         this.reg[operandA] = operandB;
         this.PC += 3; // next instructions
+        break;
+
+      case PRN:
+        console.log(this.reg[operandA]);
+        this.PC += 2;
+        break;
+
+      case HLT:
+        this.stopClock();
+        this.PC += 1;
         break;
 
       default:
