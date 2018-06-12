@@ -4,6 +4,7 @@
 const LDI = 0b10011001;
 const PRN = 0b01000011;
 const HLT = 0b00000001;
+const MUL = 0b10101010;
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -61,11 +62,11 @@ class CPU {
         break;
       case "SUB":
         // !!! IMPLEMENT ME
-        this.reg[regA] = regA - regB;
+        this.reg[regA] = this.reg[regA] - regB;
         break;
       case "MUL":
         // !!! IMPLEMENT ME
-        this.reg[regA] = regA * regB;
+        this.reg[regA] = this.reg[regA] * this.reg[regB];
         break;
       case "DIV":
         // !!! IMPLEMENT ME
@@ -98,7 +99,7 @@ class CPU {
     const IR = this.ram.read(this.PC);
 
     // Debugging output
-    console.log(`${this.PC}: ${IR.toString(2)}`);
+    // console.log(`${this.PC}: ${IR.toString(2)}`);
 
     // Get the two bytes in memory _after_ the PC in case the instruction
     // needs them.
@@ -125,6 +126,10 @@ class CPU {
       case HLT:
         this.stopClock();
         // this.PC += 1; disabled due to instLen
+        break;
+
+      case MUL:
+        this.alu('MUL', operandA, operandB);
         break;
 
       default:
