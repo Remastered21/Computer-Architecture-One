@@ -15,7 +15,7 @@
 
 ```markdown
 # LS-8 Emulator Multiply
-* [ ] Step 1: Implement missing features in ram.js
+* [x] Step 1: Implement missing features in ram.js
 * [ ] Step 2: Implement tick()
 * [ ] Step 3: Implement the HLT instruction handler
 * [ ] Step 4: Add the LDI instruction
