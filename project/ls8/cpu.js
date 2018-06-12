@@ -98,7 +98,7 @@ class CPU {
     const IR = this.ram.read(this.PC);
 
     // Debugging output
-    // console.log(`${this.PC}: ${IR.toString(2)}`);
+    console.log(`${this.PC}: ${IR.toString(2)}`);
 
     // Get the two bytes in memory _after_ the PC in case the instruction
     // needs them.
@@ -114,17 +114,17 @@ class CPU {
       case LDI:
         // Set the value in a register
         this.reg[operandA] = operandB;
-        this.PC += 3; // next instructions
+        // this.PC += 3; // next instructions; disabled due to instLen
         break;
 
       case PRN:
         console.log(this.reg[operandA]);
-        this.PC += 2;
+        // this.PC += 2; disabled due to instLen
         break;
 
       case HLT:
         this.stopClock();
-        this.PC += 1;
+        // this.PC += 1; disabled due to instLen
         break;
 
       default:
@@ -138,6 +138,9 @@ class CPU {
     // instruction byte tells you how many bytes follow the instruction byte
     // for any particular instruction.
     // !!! IMPLEMENT ME
+
+    const instLen = (IR >> 6) + 1;
+    this.PC += instLen;
   }
 }
 
