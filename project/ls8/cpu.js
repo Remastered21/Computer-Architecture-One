@@ -8,6 +8,9 @@ const MUL = 0b10101010;
 const PUSH = 0b01001101;
 const POP = 0b01001100;
 
+// store number in hexa-decimal cause why not
+const SP = 0x07;
+
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -22,8 +25,8 @@ class CPU {
 
     // Special-purpose registers
     this.PC = 0; // Program Counter
+    this.reg[SP] = 0xf4; // SP default value set to 0xf4 or 244
   }
-
   /**
    * Store value in memory address, useful for program loading
    */
@@ -61,11 +64,11 @@ class CPU {
     switch (op) {
       case "ADD":
         // !!! IMPLEMENT ME
-        this.reg[regA] = regA + regB;
+        this.reg[regA] = this.reg[regA] + this.reg[regB];
         break;
       case "SUB":
         // !!! IMPLEMENT ME
-        this.reg[regA] = this.reg[regA] - regB;
+        this.reg[regA] = this.reg[regA] - this.reg[regB];
         break;
       case "MUL":
         // !!! IMPLEMENT ME
@@ -77,11 +80,11 @@ class CPU {
         break;
       case "INC":
         // !!! IMPLEMENT ME
-        this.reg[regA] = regA++;
+        this.reg[regA] = this.reg[regA++];
         break;
       case "DEC":
         // !!! IMPLEMENT ME
-        this.reg[regA] = regA--;
+        this.reg[regA] = (regA - 1) & 0xff;
         break;
       // case "CMP":
       //   // !!! IMPLEMENT ME
@@ -102,7 +105,8 @@ class CPU {
     const IR = this.ram.read(this.PC);
 
     // Debugging output
-    // console.log(`${this.PC}: ${IR.toString(2)}`);
+    console.log(`${this.PC}: ${IR.toString(2)}`);
+    console.log(this.reg);
 
     // Get the two bytes in memory _after_ the PC in case the instruction
     // needs them.
@@ -136,10 +140,14 @@ class CPU {
         break;
 
       case PUSH:
+        console.log(`pushin'`);
+        this.alu("DEC", SP);
         break;
 
       case POP:
-        this.reg[operandA] = operandB;
+        this.alu("DEC", SP);
+        console.log(`poppin'`);
+
         break;
 
       default:
