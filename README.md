@@ -20,9 +20,9 @@
 * [x] Step 3: Implement the HLT instruction handler
 * [x] Step 4: Add the LDI instruction
 * [x] Step 5: Add the PRN instruction
-* [ ] Step 6: Implement a Multiply and Print the Result
+* [x] Step 6: Implement a Multiply and Print the Result
 * [ ] Step 7: Un-hardcode the machine code
-* [ ] Step 8: Beautify your tick() function, if needed
+* [-] Step 8: Beautify your tick() function, if needed
 
 # LS-8 Stack, Subroutines, Interrupts
 * [ ] Implement System Stack
