@@ -5,6 +5,9 @@ const LDI = 0b10011001;
 const PRN = 0b01000011;
 const HLT = 0b00000001;
 const MUL = 0b10101010;
+const PUSH = 0b01001101;
+const POP = 0b01001100;
+
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -129,7 +132,14 @@ class CPU {
         break;
 
       case MUL:
-        this.alu('MUL', operandA, operandB);
+        this.alu("MUL", operandA, operandB);
+        break;
+
+      case PUSH:
+        break;
+
+      case POP:
+        this.reg[operandA] = operandB;
         break;
 
       default:
