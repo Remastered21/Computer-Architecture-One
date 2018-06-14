@@ -25,7 +25,7 @@
 * [-] Step 8: Beautify your tick() function, if needed
 
 # LS-8 Stack, Subroutines, Interrupts
-* [ ] Implement System Stack
+* [x] Implement System Stack
 * [ ] Implement Subroutine Calls
 
 # Stretch

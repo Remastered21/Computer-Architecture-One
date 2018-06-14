@@ -7,6 +7,8 @@ const HLT = 0b00000001;
 const MUL = 0b10101010;
 const PUSH = 0b01001101;
 const POP = 0b01001100;
+const RET = 0b00001001;
+const CALL = 0b01001000;
 
 const SP = 0x07; // Stack Pointer
 
@@ -79,7 +81,7 @@ class CPU {
         break;
 
       case "INC":
-        return (regA = (regA + 1) & 0xff)
+        return (regA = (regA + 1) & 0xff);
 
       case "DEC":
         return (regA = (regA - 1) & 0xff);
@@ -138,14 +140,15 @@ class CPU {
         break;
 
       case PUSH:
-        this.reg[SP] = this.alu("DEC", this.reg[SP]);
-        this.poke(this.reg[SP], this.reg[operandA])
-        console.log(`pushin'`);
+        this.reg[SP] = this.alu("DEC", this.reg[SP]); // returns address to RAM
+        this.poke(this.reg[SP], this.reg[operandA]); // write to RAM address specified in SP slot
         break;
 
       case POP:
+        console.log(this.reg[SP]);
+         // read value from RAM address specified in SP slot
+        this.reg[operandA] = this.ram.read(this.reg[SP]); // read from RAM address specified in SP slot, then set register to read value.
         this.reg[SP] = this.alu("INC", this.reg[SP]);
-        this.poke(this.reg[SP], this.reg[operandA])
         console.log(`poppin'`);
         break;
 
