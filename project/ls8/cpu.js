@@ -10,6 +10,8 @@ const POP = 0b01001100;
 const RET = 0b00001001;
 const CALL = 0b01001000;
 
+const ADD = 0b10101000;
+
 const SP = 0x07; // Stack Pointer
 
 /**
@@ -64,7 +66,8 @@ class CPU {
   alu(op, regA, regB) {
     switch (op) {
       case "ADD":
-        this.reg[regA] = (regA + regB) & 255;
+        // this.reg[regA] = (regA + regB) & 255;
+        this.reg[regA] = this.reg[regA] + this.reg[regB];
         break;
 
       case "SUB":
@@ -105,8 +108,8 @@ class CPU {
     const IR = this.ram.read(this.PC);
 
     // Debugging output
+    console.log(this.reg);
     // console.log(`${this.PC}: ${IR.toString(2)}`);
-    // console.log(this.reg);
 
     // Get the two bytes in memory _after_ the PC in case the instruction
     // needs them.
@@ -145,11 +148,32 @@ class CPU {
         break;
 
       case POP:
-        console.log(this.reg[SP]);
-         // read value from RAM address specified in SP slot
+        // read value from RAM address specified in SP slot
         this.reg[operandA] = this.ram.read(this.reg[SP]); // read from RAM address specified in SP slot, then set register to read value.
         this.reg[SP] = this.alu("INC", this.reg[SP]);
-        console.log(`poppin'`);
+        break;
+
+      case CALL:
+        // let caller = this.reg[operandA];
+        // this.reg[operandA] = this.PC + 2;
+        // this.tick.PUSH;
+        // this.PC = caller - 2;
+
+        // console.log("call");
+        let caller = this.reg[operandA];
+        this.poke(this.reg[SP], this.PC + 2);
+        this.PC = caller - 2;
+        break;
+
+      case RET:
+        // console.log("ret");
+        let returner = this.ram.read(0xf4); // calls the top-most RAM address, which in our case is 244
+        this.PC = returner - 1;
+
+        break;
+
+      case ADD:
+        this.alu("ADD", operandA, operandB);
         break;
 
       default:
