@@ -26,7 +26,7 @@
 
 # LS-8 Stack, Subroutines, Interrupts
 * [x] Implement System Stack
-* [ ] Implement Subroutine Calls
+* [x] Implement Subroutine Calls
 
 # Stretch
 * [ ] Add interrupts to the LS-8 emulator
