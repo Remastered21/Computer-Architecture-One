@@ -8,8 +8,7 @@ const MUL = 0b10101010;
 const PUSH = 0b01001101;
 const POP = 0b01001100;
 
-// store number in hexa-decimal cause why not
-const SP = 0x07;
+const SP = 0x07; // Stack Pointer
 
 /**
  * Class for simulating a simple Computer (CPU & memory)
@@ -63,29 +62,28 @@ class CPU {
   alu(op, regA, regB) {
     switch (op) {
       case "ADD":
-        // !!! IMPLEMENT ME
-        this.reg[regA] = this.reg[regA] + this.reg[regB];
+        this.reg[regA] = (regA + regB) & 255;
         break;
+
       case "SUB":
-        // !!! IMPLEMENT ME
-        this.reg[regA] = this.reg[regA] - this.reg[regB];
+        this.reg[regA] = (regA - regB) & 255;
         break;
+
       case "MUL":
-        // !!! IMPLEMENT ME
         this.reg[regA] = this.reg[regA] * this.reg[regB];
+        // this.reg[regA] = (regA * regB) & 255;
         break;
+
       case "DIV":
-        // !!! IMPLEMENT ME
         this.reg[regA] = regA / regB;
         break;
+
       case "INC":
-        // !!! IMPLEMENT ME
-        this.reg[regA] = this.reg[regA++];
-        break;
+        return (regA = (regA + 1) & 0xff)
+
       case "DEC":
-        // !!! IMPLEMENT ME
-        this.reg[regA] = (regA - 1) & 0xff;
-        break;
+        return (regA = (regA - 1) & 0xff);
+
       // case "CMP":
       //   // !!! IMPLEMENT ME
       //   this.reg[regA] =
@@ -105,8 +103,8 @@ class CPU {
     const IR = this.ram.read(this.PC);
 
     // Debugging output
-    console.log(`${this.PC}: ${IR.toString(2)}`);
-    console.log(this.reg);
+    // console.log(`${this.PC}: ${IR.toString(2)}`);
+    // console.log(this.reg);
 
     // Get the two bytes in memory _after_ the PC in case the instruction
     // needs them.
@@ -140,14 +138,15 @@ class CPU {
         break;
 
       case PUSH:
+        this.reg[SP] = this.alu("DEC", this.reg[SP]);
+        this.poke(this.reg[SP], this.reg[operandA])
         console.log(`pushin'`);
-        this.alu("DEC", SP);
         break;
 
       case POP:
-        this.alu("DEC", SP);
+        this.reg[SP] = this.alu("INC", this.reg[SP]);
+        this.poke(this.reg[SP], this.reg[operandA])
         console.log(`poppin'`);
-
         break;
 
       default:
